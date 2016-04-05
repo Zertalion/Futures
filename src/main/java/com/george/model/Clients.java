@@ -13,10 +13,10 @@ public class Clients {
     private String lastName;
     private String firstName;
     private String nationality;
-    private int age;
-    private int SalesID;
+    private String dateOfBirth;
 
- public Clients(String lastName, String firstName, String nationality, int age, int SalesID) {
+
+ public Clients(String lastName, String firstName, String nationality, String dateOfBirth) {
  //implement me
  }
 }

@@ -29,18 +29,39 @@ public class ContractDAOTest {
         contractDAO = ctx.getBean(ContractDAO.class);
     }
 
-    @Ignore
+@Ignore
     @Test
     public void testContract() {
 
-        Sales inputForContract = new Sales(0, "test1", "test2", "test3", 2);
+        Sales inputForContract = Sales.builder()
+                .lastName("test1")
+                .firstName("test2")
+                .dateOfBirth("1111-11-11")
+                .department("dept")
+                .build();
         salesDAO.insert(inputForContract);
-        Clients inputForC = new Clients(0, "Ionescu", "Mihai", "CD2", 25, 22);
+        Clients inputForC = Clients.builder()
+                .lastName("Ionescu")
+                .firstName("Gica")
+                .dateOfBirth("1111-11-11")
+                .nationality("RO")
+                .build();
         clientsDAO.insert(inputForC);
-        Contract input = new Contract(0, 18, 22, "2010-10-10 12:00:00.0", "2011-10-10", "euro", "dolar", 1.1, 10000, 100);
+        Contract input =  Contract.builder()
+                .ClientID(27)
+                .SalesID(33)
+                .creationDate("2010-10-10 12:00:00.0")
+                .settlementDate("2011-10-10")
+                .usedCurrency("euro")
+                .boughtCurrency("dolar")
+                .exchangeRate(1.1)
+                .amount(10000)
+                .price(100)
+                .build();
+
         contractDAO.insert(input);
 
-        Contract output = contractDAO.findById(8);
+        Contract output = contractDAO.findById(12);
 
         assertEquals(input.getCreationDate(), output.getCreationDate());
         assertEquals(input.getSettlementDate(), output.getSettlementDate());

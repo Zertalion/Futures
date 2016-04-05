@@ -22,17 +22,22 @@ public class SalesDAOTest {
         ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
         salesDAO = ctx.getBean(SalesDAO.class);
     }
-    @Ignore
+@Ignore
     @Test
     public void testSales(){
 
-        Sales input = new Sales(0,"test1","test2","test3",2);
+        Sales input = Sales.builder()
+                .lastName("test1")
+                .firstName("test2")
+                .dateOfBirth("1111-11-11")
+                .department("dept")
+                .build();
         salesDAO.insert(input);
         Sales output  = salesDAO.findSalesByFirstAndLastName("test2","test1");
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());
-        assertEquals(input.getAge(), output.getAge());
+        assertEquals(input.getDateOfBirth(), output.getDateOfBirth());
     }
 
 }

@@ -28,18 +28,21 @@ public class ClientDAOTest {
         salesDAO = ctx.getBean(SalesDAO.class);
     }
 
-    @Ignore
+@Ignore
     @Test
     public void testClients(){
-        Sales inputForClient = new Sales(0,"test1","test2","test3",2);
-        salesDAO.insert(inputForClient);
-        Clients input = new Clients(0,"Ionescu","Mihai","CD2",25, 1);
+        Clients input =  Clients.builder()
+                .lastName("Ionescu")
+                .firstName("Gica")
+                .dateOfBirth("1111-11-11")
+                .nationality("RO")
+                .build();
         clientsDAO.insert(input);
-        Clients output  = clientsDAO.findClientByFirstAndLastName("Mihai","Ionescu","CD2");
+        Clients output  = clientsDAO.findById(30);
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());
-        assertEquals(input.getAge(), output.getAge());
+        assertEquals(input.getDateOfBirth(), output.getDateOfBirth());
         assertEquals(input.getNationality(), output.getNationality());
     }
 

@@ -13,7 +13,7 @@ public class Sales {
     private String lastName;
     private String firstName;
     private String department;
-    private int age;
+    private String dateOfBirth;
 
     public Sales(){
 
