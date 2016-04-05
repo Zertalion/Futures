@@ -1,12 +1,7 @@
 package com.george.dao;
 
-import com.george.SpringConfig;
-import com.george.model.Clients;
-import com.george.model.Contract;
 import com.george.model.Sales;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -52,7 +47,7 @@ public class SalesDAO extends ADAO<Sales> {
         return jdbcTemplate.update("UPDATE sales SET age = ?, department = ? where id = ? ", obj.getAge(), obj.getDepartment(), obj.getId());
     }
 
-    public Sales findSalesByfirstAndLastName(String firstName, String lastName){
+    public Sales findSalesByFirstAndLastName(String firstName, String lastName) {
         return (Sales) jdbcTemplate.queryForObject("SELECT id, FirstName, LastName,department, age " +
                         "FROM Sales where firstName = ? and lastName = ? ",
                 new Object[]{firstName, lastName},

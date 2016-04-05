@@ -4,7 +4,6 @@ import com.george.dao.ClientsDAO;
 import com.george.dao.SalesDAO;
 import com.george.model.Clients;
 import com.george.model.Sales;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class ClientDAOTest {
         salesDAO.insert(inputForClient);
         Clients input = new Clients(0,"Ionescu","Mihai","CD2",25, 1);
         clientsDAO.insert(input);
-        Clients output  = clientsDAO.findClientByfirstAndLastName("Mihai","Ionescu","CD2");
+        Clients output  = clientsDAO.findClientByFirstAndLastName("Mihai","Ionescu","CD2");
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());

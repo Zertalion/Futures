@@ -47,7 +47,7 @@ public class ClientsDAO extends ADAO<Clients> {
         return jdbcTemplate.update("UPDATE Clients SET age = ?, SalesID = ? where id = ? ", obj.getAge(), obj.getSalesID(), obj.getId());
     }
 
-    public Clients findClientByfirstAndLastName(String firstName, String lastName, String country){
+    public Clients findClientByFirstAndLastName(String firstName, String lastName, String country){
         return (Clients) jdbcTemplate.queryForObject("SELECT id, FirstName, LastName,nationality, age, SalesID " +
                                                      "FROM Clients where firstName=? and lastName=? and nationality=?",
                 new Object[]{firstName, lastName, country},

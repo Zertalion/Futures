@@ -28,7 +28,7 @@ public class SalesDAOTest {
 
         Sales input = new Sales(0,"test1","test2","test3",2);
         salesDAO.insert(input);
-        Sales output  = salesDAO.findSalesByfirstAndLastName("test2","test1");
+        Sales output  = salesDAO.findSalesByFirstAndLastName("test2","test1");
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());
