@@ -16,7 +16,8 @@ public class Clients {
     private String dateOfBirth;
 
 
- public Clients(String lastName, String firstName, String nationality, String dateOfBirth) {
+ //public Clients(String lastName, String firstName, String nationality, String dateOfBirth) {
  //implement me
- }
+ //}
+    public Clients(){}
 }

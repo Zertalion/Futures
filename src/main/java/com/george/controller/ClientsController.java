@@ -2,15 +2,14 @@ package com.george.controller;
 
 import com.george.dao.ClientsDAO;
 import com.george.model.Clients;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-//@RestController
+@RestController
 @RequestMapping(value = "/clients")
 public class ClientsController {
 
@@ -22,19 +21,18 @@ public class ClientsController {
         return clientsDAO.findById(id);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Clients> findAll() {return clientsDAO.findAll();}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int insert(@PathVariable Clients obj) {return clientsDAO.insert(obj);}
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int insert(@RequestBody Clients client) {return clientsDAO.insert(client);}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int update(@PathVariable Clients obj) {return clientsDAO.update(obj);}
+    @RequestMapping(value = "/up", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int update(@RequestBody Clients client) {return clientsDAO.update(client);}
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int deleteById(@PathVariable int id) {return clientsDAO.deleteById(id); }
+    @RequestMapping(value = "/del", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public int deleteById(@RequestParam("id") int id) throws MessagingException
+    {return clientsDAO.deleteById(id); }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Clients findClientsByFirstAndLastName(@PathVariable String firstName, @PathVariable String lastName, @PathVariable String country)
-    {return clientsDAO.findClientByFirstAndLastName(firstName,lastName,country);}
+
 }

@@ -44,7 +44,7 @@ public class ClientsDAO extends ADAO<Clients> {
 
     @Override
     public int update(Clients obj) {
-        return jdbcTemplate.update("UPDATE Clients SET dateOfBirth = ?, where id = ? ", obj.getDateOfBirth(), obj.getId());
+        return jdbcTemplate.update("UPDATE Clients SET dateOfBirth = ? where id = ? ", obj.getDateOfBirth(), obj.getId());
     }
 
     public Clients findClientByFirstAndLastName(String firstName, String lastName, String country){

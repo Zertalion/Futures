@@ -19,5 +19,7 @@ public class Contract {
     private double exchangeRate;
     private int amount;
     private int price;
+
+    public Contract(){}
 }
 
