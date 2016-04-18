@@ -1,0 +1,131 @@
+<html lang="en" >
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+
+
+    <style>
+        .tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+
+    table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd)	{
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+.myGrid {
+    width: 500px;
+    height: 250px;
+  }
+
+    </style>
+</head>
+<body ng-app="FutureApp" ng-cloak>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+
+<script type="text/javascript">
+    /**
+     * You must include the dependency on 'ngMaterial'
+     */
+   <!--var app = angular.module('FutureApp', ['ngMaterial','ngTouch','ui.grid']);-->
+   var app = angular.module('FutureApp', ['ngMaterial']);
+
+
+    app.controller('salesCtrl', function($scope, $http) {
+        $http.get("http://localhost:8080/sales/all")
+        .then(function (response) {$scope.sales = response.data;});
+    });
+
+    app.controller('clientsCtrl', function($scope, $http) {
+        $http.get("http://localhost:8080/clients/all")
+        .then(function (response) {$scope.clients = response.data;});
+    });
+
+    app.controller('contractCtrl', function($scope, $http) {
+        $http.get("http://localhost:8080/contract/all")
+        .then(function (response) {$scope.contract = response.data;});
+    });
+
+  </script>
+
+<md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Sales">
+            <md-content class="md-padding">
+                <h1 class="md-display-2">Sales</h1>
+                <!--<table data-ng-controller="salesCtrl">-->
+                    <!--<tr data-ng-repeat="x in sales">-->
+                        <!--<td>{{ x.id }}</td>-->
+                        <!--<td>{{ x.lastName }}</td>-->
+                        <!--<td>{{ x.firstName }}</td>-->
+                        <!--<td>{{ x.dateOfBirth }}</td>-->
+                    <!--</tr>-->
+                <!--</table>-->
+                <!--<div ng-controller="salesCtrl">-->
+                    <!--<div id="grid1" ui-grid="{ data: sales }" class="grid"></div>-->
+                <!--</div>-->
+                <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+                    Custom Dialog
+                </md-button>
+            </md-content>
+        </md-tab>
+        <md-tab label="Clients">
+            <md-content class="md-padding">
+                <h1 class="md-display-2">Clients</h1>
+                <table data-ng-controller="clientsCtrl">
+                    <tr data-ng-repeat="x in clients">
+                        <td>{{ x.id }}</td>
+                        <td>{{ x.lastName }}</td>
+                        <td>{{ x.firstName }}</td>
+                        <td>{{ x.nationality }}</td>
+                        <td>{{ x.dateOfBirth }}</td>
+                    </tr>
+                </table>
+            </md-content>
+        </md-tab>
+        <md-tab label="Contract">
+            <md-content class="md-padding">
+                <h1 class="md-display-2">Contract</h1>
+                <table data-ng-controller="contractCtrl">
+                    <tr data-ng-repeat="x in contract">
+                        <td>{{ x.id }}</td>
+                        <td>{{ x.clientID }}</td>
+                        <td>{{ x.salesID }}</td>
+                        <td>{{ x.creationDate }}</td>
+                        <td>{{ x.settlementDate }}</td>
+                        <td>{{ x.usedCurrency }}</td>
+                        <td>{{ x.boughtCurrency }}</td>
+                        <td>{{ x.exchangeRate }}</td>
+                        <td>{{ x.amount }}</td>
+                        <td>{{ x.price }}</td>
+                    </tr>
+                </table>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+</md-content>
+
+</body>
+</html>
+
+
