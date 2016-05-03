@@ -2,7 +2,6 @@ package com.george.controller;
 
 import com.george.dao.SalesDAO;
 import com.george.model.Sales;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class SalesController {
     }
 
     @RequestMapping(value = "/del", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public int deleteById(@RequestParam("id") int id) throws MessagingException {
+    public int deleteById(@RequestParam("id") int id) {
         return salesDAO.deleteById(id);
     }
 

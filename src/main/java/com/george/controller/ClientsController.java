@@ -2,7 +2,6 @@ package com.george.controller;
 
 import com.george.dao.ClientsDAO;
 import com.george.model.Clients;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +21,24 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Clients> findAll() {return clientsDAO.findAll();}
+    public List<Clients> findAll() {
+        return clientsDAO.findAll();
+    }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public int insert(@RequestBody Clients client) {return clientsDAO.insert(client);}
+    public int insert(@RequestBody Clients client) {
+        return clientsDAO.insert(client);
+    }
 
     @RequestMapping(value = "/up", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public int update(@RequestBody Clients client) {return clientsDAO.update(client);}
+    public int update(@RequestBody Clients client) {
+        return clientsDAO.update(client);
+    }
 
     @RequestMapping(value = "/del", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public int deleteById(@RequestParam("id") int id) throws MessagingException
-    {return clientsDAO.deleteById(id); }
+    public int deleteById(@RequestParam("id") int id) {
+        return clientsDAO.deleteById(id);
+    }
 
 
 }
