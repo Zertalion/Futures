@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<md-dialog aria-label="Update" ng-controller="salesCtrl" layout="column"  ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Update</h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                 <div ng-if="gridApi.selection.getSelectedRows()[0].id">
+                    <p>Updating entry with id {{gridApi.selection.getSelectedRows()[0].id}}.</p>
+                 </div>
+
+                <div ng-if="!gridApi.selection.getSelectedRows()[0].id">
+                    <p>Please select an entry to update</p>
+                </div>
+
+                <md-input-container ng-if="gridApi.selection.getSelectedRows()[0].id" class="md-block">
+                    <label>Department</label>
+                    <input required md-no-asterisk name="department" ng-model="sales.department">
+                    <div ng-messages="projectForm.department.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-if="gridApi.selection.getSelectedRows()[0].id"  class="md-block">
+                    <label>Date of birth</label>
+                    <input required md-no-asterisk name="dateOfBirth" ng-model="sales.dateOfBirth" >
+                    <div ng-messages="projectForm.dateOfBirth.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-if="gridApi.selection.getSelectedRows()[0].id" ng-click="answer('Cancel')">
+                Cancel
+            </md-button>
+            <md-button ng-click="answer('Save'); sendUpdate()" ng-if="gridApi.selection.getSelectedRows()[0].id" style="margin-right:20px;">
+                Save
+            </md-button>
+            <md-button ng-click="answer('Ok')" ng-if="!gridApi.selection.getSelectedRows()[0].id">
+                Ok
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

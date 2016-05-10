@@ -1,4 +1,4 @@
-var app = angular.module('FutureApp', ['ngMaterial', 'ngTouch', 'ui.grid', 'ui.grid.pagination', 'ui.grid.selection']);
+var app = angular.module('FutureApp', ['ngMaterial', 'ngTouch', 'ui.grid', 'ui.grid.pagination', 'ui.grid.selection', 'ngAnimate']);
  
 app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $interval) {
   $scope.gridOptions = {
@@ -6,74 +6,52 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
     paginationPageSize: 25,
      enableRowSelection: true,
      enableRowHeaderSelection: false,
-//      enableRowSelection: true,
-//        enableSelectAll: true,
-//        selectionRowHeaderWidth: 35,
+     multiSelect : false,
+     modifierKeysToMultiSelect : false,
+     noUnselect : false,
+     enableFiltering: true,
+
     columnDefs: [
-      { name: 'id' },
-      { name: 'lastName' },
-      { name: 'firstName' },
-      { name: 'department'},
-      { name: 'dateOfBirth'}
+      { name: 'id' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'lastName' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'firstName' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'department', headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'dateOfBirth', headerCellClass: $scope.highlightFilteredHeader, cellFilter: 'date:"MM/dd/yyyy"'}
     ]
   };
-  $scope.gridOptions.multiSelect = false;
+
     $scope.gridOptions.onRegisterApi = function( gridApi ) {
     $scope.gridApi = gridApi;
+    gridApi.selection.on.rowSelectionChanged($scope,function(row){
+    console.log("Get selected rows", gridApi.selection.getSelectedRows())
+    $scope.sales = {} ;
+        $scope.sales.department = gridApi.selection.getSelectedRows()[0].department;
+        console.log("rowSelectionChanged $scope", $scope)
+     });
   };
+
+  $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
+      if( col.filters[0].term ){
+        return 'header-filtered';
+      } else {
+        return '';
+      }
+    };
  
   $http.get('/sales/all')
   .success(function (data) {
     $scope.gridOptions.data = data;
-//$timeout(function() {
-//        if($scope.gridApi.selection.selectRow){
-//          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-//        }
-//      });
-//$interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
+
   });
 
-//  $scope.toggleRowSelection = function() {
-//    $scope.gridApi.selection.clearSelectedRows();
-//    $scope.gridOptions.enableRowSelection = !$scope.gridOptions.enableRowSelection;
-//    $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.OPTIONS);
-//  };
-//      $scope.selectAll = function() {
-//        $scope.gridApi.selection.selectAllRows();
-//      };
-//
-//      $scope.clearAll = function() {
-//        $scope.gridApi.selection.clearSelectedRows();
-//      };
-//$scope.info = {};
 
-//   $scope.gridOptions.onRegisterApi = function(gridApi){
-//        //set gridApi on scope
-//        $scope.gridApi = gridApi;
-////        gridApi.selection.on.rowSelectionChanged($scope,function(row){
-////          var msg = 'row selected ' + row.isSelected;
-////          $log.log(msg);
-////        });
-////
-////        gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-////          var msg = 'rows changed ' + rows.length;
-////          $log.log(msg);
-////        });
-//      };
-
-
-         $scope.gridOptions.multiSelect = false;
-         $scope.gridOptions.modifierKeysToMultiSelect = false;
-         $scope.gridOptions.noUnselect = true;
-
-
-  $scope.showAdvanced = function(ev) {
+  $scope.salesAdd = function(ev) {
            console.log('Clicked');
             console.log(JSON.stringify($scope.gridApi.selection.getSelectedRows()[0]));
               var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
               $mdDialog.show({
                 controller: DialogController,
-                templateUrl: 'dialog1.tmpl.html',
+                templateUrl: 'salesAdd.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,
@@ -81,7 +59,39 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
               })
               };
 
-                   $scope.sendData = function() {
+              $scope.salesDelete = function(ev) {
+                         console.log('Clicked');
+
+                            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                            $mdDialog.show({
+                              controller: DialogController,
+                              templateUrl: 'salesDelete.html',
+                              parent: angular.element(document.body),
+                              targetEvent: ev,
+                              scope: $scope.$new(),
+                              clickOutsideToClose:true,
+                              fullscreen: useFullScreen
+                            })
+                            };
+
+                             $scope.salesUpdate = function(ev) {
+
+                                  console.log('Clicked scope', $scope);
+
+                               var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                                   $mdDialog.show({
+                                   controller: DialogController,
+                                   templateUrl: 'salesUpdate.html',
+                                   parent: angular.element(document.body),
+                                   targetEvent: ev,
+                                   scope: $scope,
+                                   preserveScope: true,
+                                   clickOutsideToClose:true,
+                                   fullscreen: useFullScreen
+                                   })
+                                   };
+
+                   $scope.sendAdd = function() {
               var dataObj = {
                   firstName: $scope.firstName,
                   lastName: $scope.lastName,
@@ -100,6 +110,45 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
               })
               };
 
+                   $scope.sendDel = function() {
+                   console.log('DELETE---- '+$scope.gridApi.selection.getSelectedRows()[0].id);
+                            var dataObj = {
+                                id:$scope.gridApi.selection.getSelectedRows()[0].id
+                            };
+                             var config = {
+                                headers : {
+                                    'Content-Type': 'application/json;'
+                                }
+                            }
+
+                            console.log(dataObj);
+                             $http.post('http://localhost:8080/sales/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
+                            .success(function (data, status, headers, config) {
+                                $scope.PostDataResponse = data;
+                            })
+                            };
+
+                                  $scope.sendUpdate = function() {
+
+                                           console.log("Sending update scope", $scope)
+
+                                          var dataObj = {
+                                              id:$scope.gridApi.selection.getSelectedRows()[0].id,
+                                             department: $scope.sales.department,
+                                             dateOfBirth: $scope.sales.dateOfBirth
+                                          };
+                                           var config = {
+                                              headers : {
+                                                  'Content-Type': 'application/json;'
+                                              }
+                                          }
+                                          console.log(dataObj);
+                                           $http.post('http://localhost:8080/sales/up', dataObj, config)
+                                          .success(function (data, status, headers, config) {
+                                              $scope.PostDataResponse = data;
+                                          })
+                                          };
+
                  function DialogController($scope, $mdDialog) {
     $scope.hide = function() {
       $mdDialog.hide();
@@ -115,27 +164,152 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
 
 });
 
-app.controller('clientsCtrl', ['$scope', '$http', '$mdDialog', '$mdMedia' ,function ($scope, $http) {
+app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $interval) {
   $scope.gridOptions = {
     paginationPageSizes: [25, 50, 75],
     paginationPageSize: 25,
+        enableRowSelection: true,
+         enableRowHeaderSelection: false,
+         multiSelect : false,
+         modifierKeysToMultiSelect : false,
+         noUnselect : false,
+         enableFiltering: true,
     columnDefs: [
-      { name: 'id' },
-      { name: 'lastName' },
-      { name: 'firstName' },
-      { name: 'nationality'},
-      { name: 'dateOfBirth'}
+      { name: 'id' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'lastName' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'firstName' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'nationality' , headerCellClass: $scope.highlightFilteredHeader},
+      { name: 'dateOfBirth' , headerCellClass: $scope.highlightFilteredHeader ,cellFilter: 'date:"MM/dd/yyyy"'}
     ]
   };
-
-
 
   $http.get('/clients/all')
   .success(function (data) {
     $scope.gridOptions.data = data;
 
   });
-}]);
+ $scope.gridOptions.onRegisterApi = function( gridApi ) {
+    $scope.gridApi = gridApi;
+    $scope.clients = {} ;
+  };
+
+  $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
+      if( col.filters[0].term ){
+        return 'header-filtered';
+      } else {
+        return '';
+      }
+    };
+              function DialogController($scope, $mdDialog) {
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+    };
+    }
+
+ $scope.clientsAdd = function(ev) {
+           console.log('Clicked');
+            console.log(JSON.stringify($scope.gridApi.selection.getSelectedRows()[0]));
+              var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+              $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'clientsAdd.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+              })
+              };
+     $scope.sendClAdd = function() {
+              var dataObj = {
+                  firstName: $scope.firstName,
+                  lastName: $scope.lastName,
+                  nationality: $scope.nationality,
+                  dateOfBirth: $scope.dateOfBirth
+              };
+               var config = {
+                  headers : {
+                      'Content-Type': 'application/json;'
+                  }
+              }
+              console.log(dataObj);
+               $http.post('http://localhost:8080/clients/add', dataObj, config)
+              .success(function (data, status, headers, config) {
+                  $scope.PostDataResponse = data;
+              })
+              };
+
+                 $scope.clientsDelete = function(ev) {
+                                       console.log('Clicked');
+
+                                          var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                                          $mdDialog.show({
+                                            controller: DialogController,
+                                            templateUrl: 'clientsDelete.html',
+                                            parent: angular.element(document.body),
+                                            targetEvent: ev,
+                                            scope: $scope.$new(),
+                                            clickOutsideToClose:true,
+                                            fullscreen: useFullScreen
+                                          })
+                                          };
+
+               $scope.sendClDel = function() {
+                                 console.log('DELETE---- '+$scope.gridApi.selection.getSelectedRows()[0].id);
+                                          var dataObj = {
+                                              id:$scope.gridApi.selection.getSelectedRows()[0].id
+                                          };
+                                           var config = {
+                                              headers : {
+                                                  'Content-Type': 'application/json;'
+                                              }
+                                          }
+
+                                          console.log(dataObj);
+                                           $http.post('http://localhost:8080/clients/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
+                                          .success(function (data, status, headers, config) {
+                                              $scope.PostDataResponse = data;
+                                          })
+                                          };
+                $scope.clientsUpdate = function(ev) {
+
+                                                 console.log('Clicked');
+
+                                              var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                                                  $mdDialog.show({
+                                                  controller: DialogController,
+                                                  templateUrl: 'clientsUpdate.html',
+                                                  parent: angular.element(document.body),
+                                                  targetEvent: ev,
+                                                  scope: $scope,
+                                                  preserveScope: true,
+                                                  clickOutsideToClose:true,
+                                                  fullscreen: useFullScreen
+                                                  })
+                                                  };
+                $scope.sendClUpdate = function() {
+
+                                                          var dataObj = {
+                                                              id:$scope.gridApi.selection.getSelectedRows()[0].id,
+                                                              dateOfBirth: $scope.clients.dateOfBirth
+                                                          };
+                                                           var config = {
+                                                              headers : {
+                                                                  'Content-Type': 'application/json;'
+                                                              }
+                                                          }
+                                                          console.log(dataObj);
+                                                           $http.post('http://localhost:8080/clients/up', dataObj, config)
+                                                          .success(function (data, status, headers, config) {
+                                                              $scope.PostDataResponse = data;
+                                                          })
+                                                          };
+});
 
  app.controller('contractCtrl', ['$scope', '$http', '$mdDialog', '$mdMedia' ,function ($scope, $http) {
    $scope.gridOptions = {

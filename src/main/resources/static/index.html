@@ -32,17 +32,17 @@
                 <h1 class="md-display-2">Sales</h1>
 
                 <div ng-controller="salesCtrl" >
-                    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+                    <md-button class="md-primary md-raised" ng-click="salesAdd($event)">
                         Add new
                     </md-button>
-
-
                     <br/>
-                    <button type="button" class="btn btn-success" ng-disabled="!gridApi.grid.options.multiSelect" ng-click="selectAll()">Select All</button>
-                    <button type="button" class="btn btn-success" ng-click="clearAll()">Clear All</button>
-
+                    <md-button class="md-primary md-raised" ng-click="salesDelete($event)">
+                        Delete
+                    </md-button>
                     <br/>
-
+                    <md-button class="md-primary md-raised" ng-click="salesUpdate($event)">
+                        Update
+                    </md-button>
 
                     <div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection class="grid"></div>
                 </div>
@@ -52,8 +52,19 @@
             <md-content class="md-padding">
                 <h1 class="md-display-2">Clients</h1>
                 <div ng-controller="clientsCtrl">
-                    <!--<div id="grid2" ui-grid="{ data: clients }" class="grid"></div>-->
-                    <div ui-grid="gridOptions" ui-grid-pagination class="grid"></div>
+
+                    <md-button class="md-primary md-raised" ng-click="clientsAdd($event)">
+                        Add new
+                    </md-button>
+                    <br/>
+                    <md-button class="md-primary md-raised" ng-click="clientsDelete($event)">
+                        Delete
+                    </md-button>
+                    <br/>
+                    <md-button class="md-primary md-raised" ng-click="clientsUpdate($event)">
+                        Update
+                    </md-button>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection class="grid"></div>
                 </div>
             </md-content>
         </md-tab>
