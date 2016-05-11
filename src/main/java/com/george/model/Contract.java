@@ -2,6 +2,8 @@ package com.george.model;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -12,8 +14,8 @@ public class Contract {
     private int id;
     private int ClientID;
     private int SalesID;
-    private String creationDate;
-    private String settlementDate;
+    private Date creationDate;
+    private Date settlementDate;
     private String usedCurrency;
     private String boughtCurrency;
     private double exchangeRate;

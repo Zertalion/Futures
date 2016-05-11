@@ -62,7 +62,7 @@ public class ClientsDAO extends ADAO<Clients> {
                         .id(rs.getInt("id"))
                         .lastName(rs.getString("lastName"))
                         .firstName(rs.getString("firstName"))
-                        .dateOfBirth(rs.getString("dateOfBirth"))
+                        .dateOfBirth(rs.getDate("dateOfBirth"))
                         .nationality(rs.getString("nationality"))
                         .build();
             }

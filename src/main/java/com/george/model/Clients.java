@@ -2,6 +2,8 @@ package com.george.model;
 
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -13,11 +15,9 @@ public class Clients {
     private String lastName;
     private String firstName;
     private String nationality;
-    private String dateOfBirth;
+    private Date dateOfBirth;
 
 
- //public Clients(String lastName, String firstName, String nationality, String dateOfBirth) {
- //implement me
- //}
+
     public Clients(){}
 }

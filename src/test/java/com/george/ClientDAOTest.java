@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import static org.junit.Assert.*;
+import java.util.Date;
 
 /**
  * Created by georg_000 on 3/22/2016.
@@ -34,7 +35,7 @@ public class ClientDAOTest {
         Clients input =  Clients.builder()
                 .lastName("Ionescu")
                 .firstName("Gica")
-                .dateOfBirth("1111-11-11")
+                .dateOfBirth(new Date(0))
                 .nationality("RO")
                 .build();
         clientsDAO.insert(input);

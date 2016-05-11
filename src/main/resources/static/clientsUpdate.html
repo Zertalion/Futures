@@ -21,7 +21,7 @@
 
                 <md-input-container ng-if="gridApi.selection.getSelectedRows()[0].id"  class="md-block">
                     <label>Date of birth</label>
-                    <input required md-no-asterisk name="dateOfBirth" ng-model="clients.dateOfBirth" >
+                    <input required md-no-asterisk name="dateOfBirth" ng-model="clients.dateOfBirth" type="date">
                     <div ng-messages="projectForm.dateOfBirth.$error">
                         <div ng-message="required">This is required.</div>
                     </div>

@@ -63,7 +63,7 @@ public class SalesDAO extends ADAO<Sales> {
                     .id(rs.getInt("id"))
                     .lastName(rs.getString("lastName"))
                     .firstName(rs.getString("firstName"))
-                    .dateOfBirth(rs.getString("dateOfBirth"))
+                    .dateOfBirth(rs.getDate("dateOfBirth"))
                     .department(rs.getString("department"))
                     .build();
         }

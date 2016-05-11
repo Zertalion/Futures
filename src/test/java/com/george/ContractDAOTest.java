@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class ContractDAOTest {
@@ -36,22 +38,22 @@ public class ContractDAOTest {
         Sales inputForContract = Sales.builder()
                 .lastName("test1")
                 .firstName("test2")
-                .dateOfBirth("1111-11-11")
+                .dateOfBirth(new Date(0))
                 .department("dept")
                 .build();
         salesDAO.insert(inputForContract);
         Clients inputForC = Clients.builder()
                 .lastName("Ionescu")
                 .firstName("Gica")
-                .dateOfBirth("1111-11-11")
+                .dateOfBirth(new Date(0))
                 .nationality("RO")
                 .build();
         clientsDAO.insert(inputForC);
         Contract input =  Contract.builder()
                 .ClientID(27)
                 .SalesID(33)
-                .creationDate("2010-10-10 12:00:00.0")
-                .settlementDate("2011-10-10")
+                .creationDate(new Date(0))
+                .settlementDate(new Date(0))
                 .usedCurrency("euro")
                 .boughtCurrency("dolar")
                 .exchangeRate(1.1)

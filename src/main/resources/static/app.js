@@ -26,6 +26,7 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
     console.log("Get selected rows", gridApi.selection.getSelectedRows())
     $scope.sales = {} ;
         $scope.sales.department = gridApi.selection.getSelectedRows()[0].department;
+//        $scope.sales.dateOfBirth = gridApi.selection.getSelectedRows()[0].dateOfBirth;
         console.log("rowSelectionChanged $scope", $scope)
      });
   };
@@ -191,6 +192,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
  $scope.gridOptions.onRegisterApi = function( gridApi ) {
     $scope.gridApi = gridApi;
     $scope.clients = {} ;
+//    $scope.clients.dateOfBirth = gridApi.selection.getSelectedRows()[0].dateOfBirth;
   };
 
   $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
@@ -317,8 +319,8 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
      paginationPageSize: 25,
      columnDefs: [
        { name: 'id' },
-       { name: 'ClientID' },
-       { name: 'SalesID' },
+       { name: 'clientID' },
+       { name: 'salesID' },
        { name: 'creationDate'},
        { name: 'settlementDate'},
        { name: 'usedCurrency'},
@@ -330,10 +332,8 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
    };
 
 
-
    $http.get('/contract/all')
    .success(function (data) {
      $scope.gridOptions.data = data;
-
    });
  }]);
