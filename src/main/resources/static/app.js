@@ -26,7 +26,7 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
     console.log("Get selected rows", gridApi.selection.getSelectedRows())
     $scope.sales = {} ;
         $scope.sales.department = gridApi.selection.getSelectedRows()[0].department;
-//        $scope.sales.dateOfBirth = gridApi.selection.getSelectedRows()[0].dateOfBirth;
+        $scope.sales.dateOfBirth = new Date(gridApi.selection.getSelectedRows()[0].dateOfBirth);
         console.log("rowSelectionChanged $scope", $scope)
      });
   };
@@ -191,8 +191,10 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
   });
  $scope.gridOptions.onRegisterApi = function( gridApi ) {
     $scope.gridApi = gridApi;
-    $scope.clients = {} ;
-//    $scope.clients.dateOfBirth = gridApi.selection.getSelectedRows()[0].dateOfBirth;
+ gridApi.selection.on.rowSelectionChanged($scope,function(row){
+        $scope.clients = {} ;
+     $scope.clients.dateOfBirth = new Date(gridApi.selection.getSelectedRows()[0].dateOfBirth);
+ });
   };
 
   $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
@@ -313,21 +315,27 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                                                           };
 });
 
- app.controller('contractCtrl', ['$scope', '$http', '$mdDialog', '$mdMedia' ,function ($scope, $http) {
+ app.controller('contractCtrl', function ($scope, $http, $mdDialog, $mdMedia, $interval) {
    $scope.gridOptions = {
      paginationPageSizes: [25, 50, 75],
      paginationPageSize: 25,
+      enableRowSelection: true,
+      enableRowHeaderSelection: false,
+      multiSelect : false,
+      modifierKeysToMultiSelect : false,
+      noUnselect : false,
+     enableFiltering: true,
      columnDefs: [
-       { name: 'id' },
-       { name: 'clientID' },
-       { name: 'salesID' },
-       { name: 'creationDate'},
-       { name: 'settlementDate'},
-       { name: 'usedCurrency'},
-       { name: 'boughtCurrency'},
-       { name: 'exchangeRate'},
-       { name: 'amount'},
-       { name: 'price'},
+       { name: 'id' , headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'clientId' , headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'salesId' , headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'creationDate', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'settlementDate', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'usedCurrency', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'boughtCurrency', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'exchangeRate', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'amount', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'price', headerCellClass: $scope.highlightFilteredHeader}
      ]
    };
 
@@ -336,4 +344,145 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
    .success(function (data) {
      $scope.gridOptions.data = data;
    });
- }]);
+
+    $scope.gridOptions.onRegisterApi = function( gridApi ) {
+       $scope.gridApi = gridApi;
+        gridApi.selection.on.rowSelectionChanged($scope,function(row){
+       $scope.contract = {} ;
+    $scope.contract.settlementDate = new Date(gridApi.selection.getSelectedRows()[0].settlementDate);
+    $scope.contract.salesId = gridApi.selection.getSelectedRows()[0].salesId;
+    $scope.contract.amount = gridApi.selection.getSelectedRows()[0].amount;
+});
+     };
+
+     $scope.highlightFilteredHeader = function( row, rowRenderIndex, col, colRenderIndex ) {
+         if( col.filters[0].term ){
+           return 'header-filtered';
+         } else {
+           return '';
+         }
+       };
+                 function DialogController($scope, $mdDialog) {
+       $scope.hide = function() {
+         $mdDialog.hide();
+       };
+       $scope.cancel = function() {
+         $mdDialog.cancel();
+       };
+       $scope.answer = function(answer) {
+         $mdDialog.hide(answer);
+       };
+       }
+
+
+ $scope.contractAdd = function(ev) {
+           console.log('Clicked');
+
+              var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+              $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'contractAdd.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+              })
+              };
+
+
+ $scope.sendCoAdd = function() {
+              var dataObj = {
+                  clientId: $scope.clientId,
+                  salesId: $scope.salesId,
+                  creationDate: $scope.creationDate,
+                  settlementDate: $scope.settlementDate,
+                  usedCurrency: $scope.usedCurrency,
+                  boughtCurrency: $scope.boughtCurrency,
+                  exchangeRate: $scope.exchangeRate,
+                  amount: $scope.amount,
+                  price: $scope.price
+              };
+               var config = {
+                  headers : {
+                      'Content-Type': 'application/json;'
+                  }
+              }
+              console.log(dataObj);
+               $http.post('http://localhost:8080/contract/add', dataObj, config)
+              .success(function (data, status, headers, config) {
+                  $scope.PostDataResponse = data;
+              })
+              };
+
+
+                 $scope.contractDelete = function(ev) {
+                   console.log('Clicked');
+
+                   var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                    $mdDialog.show({
+                     controller: DialogController,
+                     templateUrl: 'contractDelete.html',
+                     parent: angular.element(document.body),
+                      targetEvent: ev,
+                     scope: $scope.$new(),
+                     clickOutsideToClose:true,
+                    fullscreen: useFullScreen
+                      })
+                       };
+
+    $scope.sendCoDel = function() {
+       console.log('DELETE---- '+$scope.gridApi.selection.getSelectedRows()[0].id);
+            var dataObj = {
+               id:$scope.gridApi.selection.getSelectedRows()[0].id
+                  };
+                var config = {
+                   headers : {
+                    'Content-Type': 'application/json;'
+                         }
+                     }
+
+               console.log(dataObj);
+                $http.post('http://localhost:8080/contract/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
+                .success(function (data, status, headers, config) {
+                 $scope.PostDataResponse = data;
+                 })
+               };
+
+
+      $scope.contractUpdate = function(ev) {
+
+                                                 console.log('Clicked');
+
+                                              var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+                                                  $mdDialog.show({
+                                                  controller: DialogController,
+                                                  templateUrl: 'contractUpdate.html',
+                                                  parent: angular.element(document.body),
+                                                  targetEvent: ev,
+                                                  scope: $scope,
+                                                  preserveScope: true,
+                                                  clickOutsideToClose:true,
+                                                  fullscreen: useFullScreen
+                                                  })
+                                                  };
+                $scope.sendCoUpdate = function() {
+
+                                                          var dataObj = {
+                                                              id:$scope.gridApi.selection.getSelectedRows()[0].id,
+                                                              settlementDate: $scope.contract.settlementDate,
+                                                              salesId: $scope.contract.salesId,
+                                                              amount : $scope.contract.amount
+                                                          };
+                                                           var config = {
+                                                              headers : {
+                                                                  'Content-Type': 'application/json;'
+                                                              }
+                                                          }
+                                                          console.log(dataObj);
+                                                           $http.post('http://localhost:8080/contract/up', dataObj, config)
+                                                          .success(function (data, status, headers, config) {
+                                                              $scope.PostDataResponse = data;
+                                                          })
+                                                          };
+
+ });

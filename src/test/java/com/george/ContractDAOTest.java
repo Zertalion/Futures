@@ -50,8 +50,8 @@ public class ContractDAOTest {
                 .build();
         clientsDAO.insert(inputForC);
         Contract input =  Contract.builder()
-                .ClientID(27)
-                .SalesID(33)
+                .clientId(27)
+                .salesId(33)
                 .creationDate(new Date(0))
                 .settlementDate(new Date(0))
                 .usedCurrency("euro")

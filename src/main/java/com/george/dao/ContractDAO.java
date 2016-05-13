@@ -1,11 +1,7 @@
 package com.george.dao;
 
-import com.george.SpringConfig;
-
 import com.george.model.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -36,8 +32,8 @@ public class ContractDAO extends ADAO<Contract> {
     }
     @Override
     public int insert(Contract obj) {
-        return jdbcTemplate.update("INSERT INTO Contract (id,ClientID,SalesID,creationDate,settlementDate,usedCurrency,boughtCurrency,exchangeRate,amount,price) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                obj.getId(), obj.getClientID(), obj.getSalesID(), obj.getCreationDate(), obj.getSettlementDate(),obj.getUsedCurrency(), obj.getBoughtCurrency(), obj.getExchangeRate(), obj.getAmount(),obj.getPrice());
+        return jdbcTemplate.update("INSERT INTO Contract (id,clientId,salesId,creationDate,settlementDate,usedCurrency,boughtCurrency,exchangeRate,amount,price) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                obj.getId(), obj.getClientId(), obj.getSalesId(), obj.getCreationDate(), obj.getSettlementDate(),obj.getUsedCurrency(), obj.getBoughtCurrency(), obj.getExchangeRate(), obj.getAmount(),obj.getPrice());
     }
 
     @Override
@@ -47,7 +43,7 @@ public class ContractDAO extends ADAO<Contract> {
 
     @Override
     public int update(Contract obj) {
-        return jdbcTemplate.update("UPDATE Contract SET settlementDate = ?, SalesID = ?, amount=? where id = ? ", obj.getSettlementDate(), obj.getSalesID(),obj.getAmount(), obj.getId());
+        return jdbcTemplate.update("UPDATE Contract SET settlementDate = ?, salesId = ?, amount=? where id = ? ", obj.getSettlementDate(), obj.getSalesId(),obj.getAmount(), obj.getId());
     }
 
 
@@ -60,8 +56,8 @@ public class ContractDAO extends ADAO<Contract> {
         public Object mapRow(ResultSet rs, int i) throws SQLException {
             return Contract.builder()
                     .id(rs.getInt("id"))
-                    .ClientID(rs.getInt("ClientID"))
-                    .SalesID(rs.getInt("SalesID"))
+                    .clientId(rs.getInt("clientId"))
+                    .salesId(rs.getInt("salesId"))
                     .creationDate(rs.getDate("creationDate"))
                     .settlementDate(rs.getDate("settlementDate"))
                     .usedCurrency(rs.getString("usedCurrency"))

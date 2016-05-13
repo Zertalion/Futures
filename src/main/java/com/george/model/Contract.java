@@ -12,8 +12,8 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Contract {
     private int id;
-    private int ClientID;
-    private int SalesID;
+    private int clientId;
+    private int salesId;
     private Date creationDate;
     private Date settlementDate;
     private String usedCurrency;
