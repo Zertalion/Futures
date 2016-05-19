@@ -1,5 +1,6 @@
 package com.george.model;
 
+
 import lombok.*;
 
 
@@ -12,7 +13,7 @@ import lombok.*;
 @EqualsAndHashCode
 
 
-public class Users {
+public class Users  {
 
     private String name;
     private String password;
