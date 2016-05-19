@@ -26,6 +26,11 @@
 <body >
 <div ng-cloak>
 <md-content>
+    <div ng-controller="logoutCtrl" style="height: 50px;">
+        <md-button class="md-primary md-raised" ng-click="logout($event)" style="float: right;">
+            Logout
+        </md-button>
+        </div>
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="Sales">
             <md-content class="md-padding">

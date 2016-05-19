@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<md-dialog aria-label="Logout" ng-controller="logoutCtrl" layout="column"  ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Logout</h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+
+                <p>Are you sure you want to logout ?</p>
+
+            </div>
+
+
+
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('Cancel')">
+                No
+            </md-button>
+            <md-button ng-click="answer('Delete'); sendLogout()"  style="margin-right:20px;">
+                Yes
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -486,3 +486,38 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                                                           };
 
  });
+
+app.controller('logoutCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $interval){
+
+$scope.logout = function(ev) {
+           console.log('Clicked');
+
+              var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+              $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'logout.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+              })
+              };
+
+
+              function DialogController($scope, $mdDialog) {
+                  $scope.hide = function() {
+                    $mdDialog.hide();
+                  };
+                  $scope.cancel = function() {
+                    $mdDialog.cancel();
+                  };
+                  $scope.answer = function(answer) {
+                    $mdDialog.hide(answer);
+                  };
+                  }
+
+                 $scope.sendLogout=function(){
+                  window.location.href="/logout";
+                 }
+
+});
