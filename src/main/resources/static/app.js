@@ -517,7 +517,8 @@ $scope.logout = function(ev) {
                   }
 
                  $scope.sendLogout=function(){
-                  window.location.href="/logout";
+                 window.location.href="/logout";
+
                  }
 
 });
