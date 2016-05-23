@@ -21,6 +21,8 @@ public class Contract {
     private double exchangeRate;
     private int amount;
     private int price;
+    private String clientName;
+    private String salesName;
 
     public Contract(){}
 }

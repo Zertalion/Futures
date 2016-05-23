@@ -20,7 +20,13 @@ public class ContractDAO extends ADAO<Contract> {
 
     @Override
     public List<Contract> findAll() {
-        return jdbcTemplate.query("SELECT * FROM Contract",
+        return jdbcTemplate.query("select Contract.*, " +
+                        "              Clients.LastName, " +
+                        "              Clients.FirstName, " +
+                        "              Sales.firstName as salesFirstName, " +
+                        "              Sales.lastName as salesLastName" +
+                        " from Contract join Clients on contract.clientId = Clients.id" +
+                        "              join Sales on contract.salesId = Sales.id",
                 new ContractRowMapper());
     }
 
@@ -65,6 +71,8 @@ public class ContractDAO extends ADAO<Contract> {
                     .exchangeRate(rs.getDouble("exchangeRate"))
                     .amount(rs.getInt("amount"))
                     .price(rs.getInt("price"))
+                    .clientName(rs.getString("Clients.LastName") + " " + rs.getString("Clients.FirstName"))
+                    .salesName(rs.getString("salesLastName") + " " + rs.getString("salesFirstName"))
                     .build();
         }
     }

@@ -327,8 +327,10 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
      enableFiltering: true,
      columnDefs: [
        { name: 'id' , headerCellClass: $scope.highlightFilteredHeader},
-       { name: 'clientId' , headerCellClass: $scope.highlightFilteredHeader},
-       { name: 'salesId' , headerCellClass: $scope.highlightFilteredHeader},
+       //{ name: 'clientId' , headerCellClass: $scope.highlightFilteredHeader},
+      // { name: 'salesId' , headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'clientName', headerCellClass: $scope.highlightFilteredHeader},
+       { name: 'salesName', headerCellClass: $scope.highlightFilteredHeader},
        { name: 'creationDate', headerCellClass: $scope.highlightFilteredHeader},
        { name: 'settlementDate', headerCellClass: $scope.highlightFilteredHeader},
        { name: 'usedCurrency', headerCellClass: $scope.highlightFilteredHeader},
@@ -336,6 +338,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
        { name: 'exchangeRate', headerCellClass: $scope.highlightFilteredHeader},
        { name: 'amount', headerCellClass: $scope.highlightFilteredHeader},
        { name: 'price', headerCellClass: $scope.highlightFilteredHeader}
+
      ]
    };
 
