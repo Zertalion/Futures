@@ -1,6 +1,6 @@
 var app = angular.module('FutureApp', ['ngMaterial', 'ngTouch', 'ui.grid', 'ui.grid.pagination', 'ui.grid.selection', 'ngAnimate']);
  
-app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $interval) {
+app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $interval, uiGridConstants) {
   $scope.gridOptions = {
     paginationPageSizes: [25, 50, 75],
     paginationPageSize: 25,
@@ -22,12 +22,13 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
 
     $scope.gridOptions.onRegisterApi = function( gridApi ) {
     $scope.gridApi = gridApi;
+
     gridApi.selection.on.rowSelectionChanged($scope,function(row){
-    console.log("Get selected rows", gridApi.selection.getSelectedRows())
-    $scope.sales = {} ;
+        console.log("Get selected rows", gridApi.selection.getSelectedRows())
+        $scope.sales = {} ;
         $scope.sales.department = gridApi.selection.getSelectedRows()[0].department;
         $scope.sales.dateOfBirth = new Date(gridApi.selection.getSelectedRows()[0].dateOfBirth);
-        console.log("rowSelectionChanged $scope", $scope)
+        $scope.removeRowIndex = $scope.gridOptions.data.indexOf(row.entity);
      });
   };
 
@@ -38,13 +39,12 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
         return '';
       }
     };
- 
+
+
   $http.get('/sales/all')
   .success(function (data) {
     $scope.gridOptions.data = data;
-
   });
-
 
   $scope.salesAdd = function(ev) {
            console.log('Clicked');
@@ -108,12 +108,22 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
                $http.post('http://localhost:8080/sales/add', dataObj, config)
               .success(function (data, status, headers, config) {
                   $scope.PostDataResponse = data;
+   window.location.reload();
+
               })
+
               };
 
                    $scope.sendDel = function() {
-                   console.log('DELETE---- '+$scope.gridApi.selection.getSelectedRows()[0].id);
-                            var dataObj = {
+
+
+                         console.log("removeRowIndex = ", $scope.removeRowIndex);
+                         delete $scope.gridOptions.data[$scope.removeRowIndex];
+
+
+
+                   console.log('DELETE---- ',$scope.gridApi.selection.getSelectedRows()[0].id, $scope.removeRowIndex);
+                          var dataObj = {
                                 id:$scope.gridApi.selection.getSelectedRows()[0].id
                             };
                              var config = {
@@ -123,11 +133,16 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
                             }
 
                             console.log(dataObj);
+
                              $http.post('http://localhost:8080/sales/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
-                            .success(function (data, status, headers, config) {
-                                $scope.PostDataResponse = data;
-                            })
-                            };
+                                .success(function (data, status, headers, config) {
+                                    $scope.PostDataResponse = data;
+                                  window.location.reload();
+
+                               });
+
+                };
+
 
                                   $scope.sendUpdate = function() {
 
@@ -146,8 +161,14 @@ app.controller('salesCtrl', function ($scope, $http, $mdDialog, $mdMedia, $inter
                                           console.log(dataObj);
                                            $http.post('http://localhost:8080/sales/up', dataObj, config)
                                           .success(function (data, status, headers, config) {
-                                              $scope.PostDataResponse = data;
+                                           $scope.PostDataResponse = data;
+                                               $scope.gridApi.selection.getSelectedRows()[0].department = $scope.sales.department;
+                                                $scope.gridApi.selection.getSelectedRows()[0].dateOfBirth = $scope.sales.dateOfBirth;
+
+
                                           })
+
+
                                           };
 
                  function DialogController($scope, $mdDialog) {
@@ -245,6 +266,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                $http.post('http://localhost:8080/clients/add', dataObj, config)
               .success(function (data, status, headers, config) {
                   $scope.PostDataResponse = data;
+                     window.location.reload();
               })
               };
 
@@ -278,6 +300,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                                            $http.post('http://localhost:8080/clients/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
                                           .success(function (data, status, headers, config) {
                                               $scope.PostDataResponse = data;
+                                                 window.location.reload();
                                           })
                                           };
                 $scope.clientsUpdate = function(ev) {
@@ -311,6 +334,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                                                            $http.post('http://localhost:8080/clients/up', dataObj, config)
                                                           .success(function (data, status, headers, config) {
                                                               $scope.PostDataResponse = data;
+                                                              $scope.gridApi.selection.getSelectedRows()[0].dateOfBirth = $scope.clients.dateOfBirth;
                                                           })
                                                           };
 });
@@ -414,6 +438,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                $http.post('http://localhost:8080/contract/add', dataObj, config)
               .success(function (data, status, headers, config) {
                   $scope.PostDataResponse = data;
+                     window.location.reload();
               })
               };
 
@@ -448,6 +473,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                 $http.post('http://localhost:8080/contract/del?id='+$scope.gridApi.selection.getSelectedRows()[0].id, dataObj, config)
                 .success(function (data, status, headers, config) {
                  $scope.PostDataResponse = data;
+                    window.location.reload();
                  })
                };
 
@@ -485,6 +511,7 @@ app.controller('clientsCtrl',  function ($scope, $http, $mdDialog, $mdMedia, $in
                                                            $http.post('http://localhost:8080/contract/up', dataObj, config)
                                                           .success(function (data, status, headers, config) {
                                                               $scope.PostDataResponse = data;
+                                                                 window.location.reload();
                                                           })
                                                           };
 
