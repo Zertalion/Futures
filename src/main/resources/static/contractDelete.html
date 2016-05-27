@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<md-dialog aria-label="Delete" ng-controller="contractCtrl" layout="column"  ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Delete</h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" ng-if="gridApi.selection.getSelectedRows()[0].id">
+
+                <p>Are you sure you want to delete entry with id {{gridApi.selection.getSelectedRows()[0].id}} ?</p>
+
+            </div>
+
+            <div class="md-dialog-content" ng-if="!gridApi.selection.getSelectedRows()[0].id">
+
+                <p>Please select an entry to delete.</p>
+            </div>
+
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('Cancel')" ng-if="gridApi.selection.getSelectedRows()[0].id">
+                No
+            </md-button>
+            <md-button ng-click="answer('Delete'); sendCoDel()"  ng-if="gridApi.selection.getSelectedRows()[0].id" style="margin-right:20px;">
+                Yes
+            </md-button>
+            <md-button ng-click="answer('Ok')" ng-if="!gridApi.selection.getSelectedRows()[0].id">
+                Ok
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
