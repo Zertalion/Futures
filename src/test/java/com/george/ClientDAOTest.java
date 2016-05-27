@@ -4,13 +4,13 @@ import com.george.dao.ClientsDAO;
 import com.george.dao.SalesDAO;
 import com.george.model.Clients;
 import com.george.model.Sales;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import static org.junit.Assert.*;
-import java.util.Date;
 
 /**
  * Created by georg_000 on 3/22/2016.
@@ -29,21 +29,18 @@ public class ClientDAOTest {
         salesDAO = ctx.getBean(SalesDAO.class);
     }
 
-@Ignore
+    @Ignore
     @Test
     public void testClients(){
-        Clients input =  Clients.builder()
-                .lastName("Ionescu")
-                .firstName("Gica")
-                .dateOfBirth(new Date(0))
-                .nationality("RO")
-                .build();
+        Sales inputForClient = new Sales(0,"test1","test2","test3",2);
+        salesDAO.insert(inputForClient);
+        Clients input = new Clients(0,"Ionescu","Mihai","CD2",25, 1);
         clientsDAO.insert(input);
-        Clients output  = clientsDAO.findById(30);
+        Clients output  = clientsDAO.findClientByfirstAndLastName("Mihai","Ionescu","CD2");
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());
-        assertEquals(input.getDateOfBirth(), output.getDateOfBirth());
+        assertEquals(input.getAge(), output.getAge());
         assertEquals(input.getNationality(), output.getNationality());
     }
 

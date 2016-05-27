@@ -2,8 +2,6 @@ package com.george.model;
 
 import lombok.*;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @Builder
@@ -15,7 +13,7 @@ public class Sales {
     private String lastName;
     private String firstName;
     private String department;
-    private Date dateOfBirth;
+    private int age;
 
     public Sales(){
 

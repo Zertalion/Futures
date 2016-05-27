@@ -10,9 +10,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.util.Date;
-
 import static org.junit.Assert.*;
 
 
@@ -25,22 +22,17 @@ public class SalesDAOTest {
         ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
         salesDAO = ctx.getBean(SalesDAO.class);
     }
-@Ignore
+    @Ignore
     @Test
     public void testSales(){
 
-        Sales input = Sales.builder()
-                .lastName("test1")
-                .firstName("test2")
-                .dateOfBirth(new Date(0))
-                .department("dept")
-                .build();
+        Sales input = new Sales(0,"test1","test2","test3",2);
         salesDAO.insert(input);
-        Sales output  = salesDAO.findSalesByFirstAndLastName("test2","test1");
+        Sales output  = salesDAO.findSalesByfirstAndLastName("test2","test1");
 
         assertEquals(input.getFirstName(), output.getFirstName());
         assertEquals(input.getLastName(), output.getLastName());
-        assertEquals(input.getDateOfBirth(), output.getDateOfBirth());
+        assertEquals(input.getAge(), output.getAge());
     }
 
 }
