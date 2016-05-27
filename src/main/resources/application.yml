@@ -1,8 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost/future?autoReconnect=true&useSSL=false
-    username: root
-    password: raiderfan23
-    driver-class-name: com.mysql.jdbc.Driver
-  thymeleaf:
-    prefix: classpath:/templates
